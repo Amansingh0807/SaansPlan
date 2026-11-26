@@ -262,8 +262,8 @@ describe('Exposure Engine - Core Mathematical Verification', () => {
       expect(meena?.timeWeightedPm25).toBeGreaterThan(70);
 
       // Verify that unsealed tin-roof home has higher infiltration factor than sealed 3BHK
-      const meenaInfiltration = calcInfiltrationFactor(MEENA_EQUITY_TWIN.home);
-      const sharmaInfiltration = calcInfiltrationFactor(SHARMA_FAMILY_TWIN.home);
+      const meenaInfiltration = calcInfiltrationFactor(MEENA_EQUITY_TWIN.home, false);
+      const sharmaInfiltration = calcInfiltrationFactor(SHARMA_FAMILY_TWIN.home, false);
       expect(meenaInfiltration).toBeGreaterThan(sharmaInfiltration);
     });
 
@@ -281,7 +281,7 @@ describe('Exposure Engine - Core Mathematical Verification', () => {
       // Home with DIY Corsi-Rosenthal box (CADR ~350 m³/h at ₹2,500)
       const diyProtectedHome: HomeProfile = {
         ...baselineHome,
-        purifierType: 'diy_corsi_rosenthal',
+        purifierType: 'corsi_rosenthal_diy',
         doorGapSealed: true,
       };
 
