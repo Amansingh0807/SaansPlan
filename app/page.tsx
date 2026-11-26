@@ -94,7 +94,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden border-b border-[#E4E1D8] bg-gradient-to-b from-white via-[#FBFBF8] to-[#F7F6F2] py-16 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">

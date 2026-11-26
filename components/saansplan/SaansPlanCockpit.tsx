@@ -430,7 +430,11 @@ export function SaansPlanCockpit({
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 px-4 py-6 sm:px-6">
+      <main id="main-content" className="mx-auto w-full max-w-7xl flex-1 space-y-6 px-4 py-6 sm:px-6">
+        {/* Screen Reader Announcement Live Region */}
+        <div className="sr-only" aria-live="polite" aria-atomic="true">
+          {loadingPlan ? 'Recalculating clean air plan...' : `Plan updated: ${plan.summaryHeadline}`}
+        </div>
         {/* Atmospheric Telemetry Strip */}
         <section
           aria-label="Live atmospheric telemetry"

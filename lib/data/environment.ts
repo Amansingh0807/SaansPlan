@@ -246,6 +246,11 @@ export async function getEnvironmentalSnapshot(params: {
     const windows = computeWindows(FALLBACK_WINTER_HOURLY_PM25);
     const currentHour = new Date().getHours();
     const fallbackPm25 = FALLBACK_WINTER_HOURLY_PM25[currentHour] ?? 240;
+    const isNorthIndia = params.lat > 25.5;
+    const stubbleFireCount = isNorthIndia ? 164 : 12;
+    const stubbleFireNote = isNorthIndia
+      ? 'Cached winter smog profile: shallow boundary layer (<300m) + calm winds.'
+      : 'Cached regional profile: coastal / low agricultural fire influence.';
 
     return {
       city: params.city,
@@ -259,9 +264,8 @@ export async function getEnvironmentalSnapshot(params: {
       boundaryLayerHeightM: 280,
       temperatureC: 14.5,
       inversionRisk: 'high',
-      stubbleFireCount: 164,
-      stubbleFireNote:
-        'Cached winter smog profile: shallow boundary layer (<300m) + calm winds.',
+      stubbleFireCount,
+      stubbleFireNote,
       hourlyPm25: FALLBACK_WINTER_HOURLY_PM25,
       ...windows,
       source: 'Cached Winter Smog Profile (Offline Fallback)',
