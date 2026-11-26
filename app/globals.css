@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f6f2;
+  --surface: #ffffff;
+  --surface-muted: #f0eee8;
+  --border: #e4e1d8;
+  --foreground: #0f172a;
+  --muted: #475569;
+  --accent: #0f766e;
 }
 
 @theme inline {
@@ -12,15 +17,47 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessibility: High Contrast Mode */
+[data-contrast="high"] {
+  --background: #ffffff;
+  --surface: #ffffff;
+  --border: #0f172a;
+  --muted: #1e293b;
+}
+
+/* Accessibility: Large Text Mode */
+[data-text-size="large"] {
+  font-size: 112.5%;
+}
+
+/* Crisp custom range slider for Indoor What-If Simulator */
+input[type="range"].saans-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e0d8;
+  outline: none;
+}
+
+input[type="range"].saans-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0f766e;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25);
+  cursor: pointer;
 }
