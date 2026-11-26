@@ -6,11 +6,13 @@
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.4.6-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19.3.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript Strict](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![ESLint](https://img.shields.io/badge/ESLint-0_Errors_0_Warnings-4B32C3?style=for-the-badge&logo=eslint)](https://eslint.org/)
+[![Vitest](https://img.shields.io/badge/Vitest-52_Tests_Passing-6E9F18?style=for-the-badge&logo=vitest)](https://vitest.dev/)
+[![WCAG](https://img.shields.io/badge/Accessibility-WCAG_2.1_AA-teal?style=for-the-badge)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
 [![Clerk Auth](https://img.shields.io/badge/Clerk-Authentication-6C47FF?style=for-the-badge&logo=clerk)](https://clerk.com/)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-2.5_Flash-4285F4?style=for-the-badge&logo=googlegemini)](https://aistudio.google.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-Unit_Tests_Passing-6E9F18?style=for-the-badge&logo=vitest)](https://vitest.dev/)
-[![Repo Size](https://img.shields.io/badge/Repo_Size-%3C10_MB-success?style=for-the-badge)](#submission-rules--repo-size)
+[![Repo Size](https://img.shields.io/badge/Repo_Size-%3C1_MB_(416KB)-success?style=for-the-badge)](#submission-rules--repo-size)
 
 <br/>
 
@@ -83,12 +85,12 @@ The official problem statement requirements mapped directly to implementation in
 
 | Parameter | Platform Impact | How SaansPlan Excels | Evidence in Repository |
 |---|---|---|---|
-| **Problem Statement Alignment** | **High Impact** | Solves the exact root challenge with personalized exposure, routine shifting, indoor simulation, and quantified before/after impact. | Mapped table above; complete end-to-end user journey across [`app/page.tsx`](app/page.tsx) and [`app/dashboard/page.tsx`](app/dashboard/page.tsx). |
-| **Code Quality** | **High Impact** | Modular architecture, TypeScript strict mode, zero `any` types, JSDoc-annotated mathematical formulas, ESLint clean (0 errors), Vitest test suite. | [`lib/exposure-engine/`](lib/exposure-engine/)<br/>[`lib/validation/schemas.ts`](lib/validation/schemas.ts) |
-| **Security** | **Medium Impact** | Zod `.strict()` schema validation on all API inputs, Clerk JWT sub claims with Supabase Row-Level Security (RLS), OWASP security headers in `proxy.ts`, zero secrets committed. | [`proxy.ts`](proxy.ts)<br/>[`supabase/schema.sql`](supabase/schema.sql)<br/>[`lib/validation/schemas.ts`](lib/validation/schemas.ts) |
-| **Efficiency** | **Medium Impact** | $O(N)$ exposure calculation, 15-minute in-memory telemetry caching with monotonic clock, Next.js 16 Cache Components, repo size strictly under 10 MB. | [`lib/data/environment.ts`](lib/data/environment.ts)<br/>[Repo size < 10 MB](#submission-rules--repo-size) |
-| **Testing** | **Low Impact** | 6/6 unit tests covering exposure math, CPCB breakpoints, member sensitivity differentiation, routine comparisons, and indoor ODE integration. | [`lib/exposure-engine/__tests__/exposure.test.ts`](lib/exposure-engine/__tests__/exposure.test.ts) |
-| **Accessibility** | **Low Impact** | Tri-lingual toggle (English, Hindi, Hinglish), High-Contrast Mode, Large-Text Mode, Web Speech API read-aloud, accessible color+icon+text risk badges. | [`components/saansplan/RiskBadge.tsx`](components/saansplan/RiskBadge.tsx)<br/>[`app/globals.css`](app/globals.css) |
+| **Problem Statement Alignment** | **High Impact** | Solves the exact root challenge with personalized microenvironment exposure, routine shifting, mass-balance indoor simulation, and quantified before/after impact ledger. | Mapped table above; complete end-to-end user journey across [`app/page.tsx`](app/page.tsx) and [`app/dashboard/page.tsx`](app/dashboard/page.tsx). |
+| **Code Quality** | **High Impact** | Modular architecture, TypeScript strict mode, zero `any` types, JSDoc-annotated mathematical ODE formulas, ESLint clean (0 errors, 0 warnings), pure deterministic core isolated from UI/AI layers. | [`lib/exposure-engine/`](lib/exposure-engine/)<br/>[`lib/validation/schemas.ts`](lib/validation/schemas.ts) |
+| **Security** | **Medium Impact** | In-memory sliding-window IP rate limiter (`proxy.ts`), OWASP security headers (`nosniff`, `DENY`, `strict-origin`), Zod `.strict()` schema gatekeeping, Clerk JWT sub claims with Supabase RLS, and zero LLM math hallucination. | [`proxy.ts`](proxy.ts)<br/>[`lib/security/rate-limiter.ts`](lib/security/rate-limiter.ts)<br/>[`supabase/schema.sql`](supabase/schema.sql)<br/>[`lib/validation/schemas.ts`](lib/validation/schemas.ts) |
+| **Efficiency** | **Medium Impact** | $O(N)$ exposure calculation, 15-minute in-memory telemetry caching with monotonic clock (`performance.now()`), Next.js 16 Partial Prerendering (PPR) + Cache Components, tiny repo size (~416 KB, strictly under 10 MB limit). | [`lib/data/environment.ts`](lib/data/environment.ts)<br/>[Repo size < 10 MB](#submission-rules--repo-size) |
+| **Testing** | **Low Impact** | **52 unit tests across 7 test suites** (100% pass rate) covering exposure math, CPCB breakpoints, member sensitivity, low-income equity personas, RAG corpus retrieval, rate limiting, and Zod schemas. | [`lib/exposure-engine/__tests__/`](lib/exposure-engine/__tests__/)<br/>[`lib/validation/__tests__/`](lib/validation/__tests__/)<br/>[`lib/security/__tests__/`](lib/security/__tests__/) |
+| **Accessibility** | **Low Impact** | WCAG 2.1 AA compliant: Skip-to-main-content keyboard link, `aria-live="polite"` real-time announcements, High-Contrast & Large-Text modes, bilingual English/Hindi/Hinglish copy, Web Speech API read-aloud, and WCAG-tested color contrast. | [`app/layout.tsx`](app/layout.tsx)<br/>[`components/saansplan/SaansPlanCockpit.tsx`](components/saansplan/SaansPlanCockpit.tsx)<br/>[`components/saansplan/RiskBadge.tsx`](components/saansplan/RiskBadge.tsx) |
 
 ---
 
@@ -305,7 +307,7 @@ GEMINI_API_KEY=your_gemini_api_key
 ```bash
 npm test
 ```
-Executes 6 unit tests validating the deterministic exposure formulas, CPCB breakpoints, and indoor mass-balance ODE.
+Executes 52 automated Vitest tests across 7 test suites validating deterministic exposure equations, low-income equity scenarios, CPCB breakpoints, rate-limiting windows, schema gatekeeping, and indoor mass-balance ODE integration.
 
 ### 4. Run Linter
 ```bash

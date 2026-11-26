@@ -119,4 +119,132 @@ describe('Validation Schemas - Strict Input Gatekeeping', () => {
       expect(LedgerActionSchema.safeParse(valid).success).toBe(true);
     });
   });
+
+  describe('HouseholdMemberSchema & HouseholdTwinSchema', () => {
+    it('validates a complete household member model', () => {
+      const validMember = {
+        id: 'mem-1',
+        name: 'Aarav Sharma',
+        role: 'School Kid',
+        age: 8,
+        sensitivity: 'child_under_12',
+        commuteMode: 'bus_open',
+        schedule: [
+          {
+            id: 'slot-1',
+            label: 'School Bus Commute',
+            startHour: 7,
+            endHour: 8,
+            location: 'commute',
+            activity: 'commute',
+            commuteMode: 'bus_open',
+            maskN95: true,
+          },
+        ],
+      };
+      expect(HouseholdMemberSchema.safeParse(validMember).success).toBe(true);
+
+      const invalidAge = { ...validMember, age: -5 };
+      expect(HouseholdMemberSchema.safeParse(invalidAge).success).toBe(false);
+    });
+
+    it('validates a full HouseholdTwin configuration', () => {
+      const validTwin = {
+        id: 'twin-101',
+        name: 'Kapoor Residence',
+        city: 'Delhi',
+        locality: 'Dwarka Sector 10',
+        pincode: '110075',
+        lat: 28.59,
+        lon: 77.05,
+        budgetMode: false,
+        home: {
+          type: 'apartment_low',
+          floor: 3,
+          windowsFacingRoad: true,
+          hasKitchenChimney: true,
+          cookingFuel: 'png_piped',
+          purifierType: 'hepa_standard',
+          roomVolumeM3: 45,
+          doorGapSealed: true,
+        },
+        members: [
+          {
+            id: 'mem-1',
+            name: 'Sunita Kapoor',
+            role: 'Mother',
+            age: 36,
+            sensitivity: 'standard',
+            commuteMode: 'car_ac_recirc',
+            schedule: [
+              {
+                id: 's-1',
+                label: 'Office Work',
+                startHour: 9,
+                endHour: 17,
+                location: 'indoor_school_office',
+                activity: 'light_indoor',
+              },
+            ],
+          },
+        ],
+      };
+      expect(HouseholdTwinSchema.safeParse(validTwin).success).toBe(true);
+    });
+  });
+
+  describe('ExposureRequestSchema', () => {
+    it('validates valid exposure calculation request', () => {
+      const validRequest = {
+        household: {
+          id: 'twin-202',
+          name: 'Verma House',
+          city: 'Noida',
+          locality: 'Sector 62',
+          pincode: '201309',
+          lat: 28.62,
+          lon: 77.37,
+          budgetMode: false,
+          home: {
+            type: 'independent_house',
+            floor: 1,
+            windowsFacingRoad: false,
+            hasKitchenChimney: false,
+            cookingFuel: 'png_piped',
+            purifierType: 'none',
+            roomVolumeM3: 55,
+            doorGapSealed: false,
+          },
+          members: [
+            {
+              id: 'm-1',
+              name: 'Amit Verma',
+              role: 'Consultant',
+              age: 34,
+              sensitivity: 'standard',
+              commuteMode: 'wfh_indoor',
+              schedule: [
+                {
+                  id: 's-1',
+                  label: 'WFH Desk',
+                  startHour: 9,
+                  endHour: 18,
+                  location: 'indoor_home',
+                  activity: 'light_indoor',
+                },
+              ],
+            },
+          ],
+        },
+        hourlyPm25: Array.from({ length: 24 }, () => 150),
+      };
+      expect(ExposureRequestSchema.safeParse(validRequest).success).toBe(true);
+
+      const invalidHourlyLength = {
+        ...validRequest,
+        hourlyPm25: [100, 200], // Must be exactly 24 hours
+      };
+      expect(ExposureRequestSchema.safeParse(invalidHourlyLength).success).toBe(false);
+    });
+  });
 });

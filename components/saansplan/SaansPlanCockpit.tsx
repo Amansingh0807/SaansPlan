@@ -100,7 +100,7 @@ export function SaansPlanCockpit({
       }
     }
     loadCloudHousehold();
-  }, []);
+  }, [language]);
 
   // Deterministic exposure summary recalculates instantaneously on any twin/env change
   const exposureSummary = useMemo(

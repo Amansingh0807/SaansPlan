@@ -245,4 +245,76 @@ describe('Exposure Engine - Core Mathematical Verification', () => {
       expect(impact.pm25SavedUgM3).toBeGreaterThan(5);
     });
   });
+
+  describe('Low-Income Equity Persona: MEENA_EQUITY_TWIN', () => {
+    it('properly calculates severe biomass chulha spike and DIY air filter benefits', () => {
+      const summary = calcHouseholdExposure(
+        MEENA_EQUITY_TWIN,
+        SAMPLE_WINTER_SMOG_HOURLY_PM25
+      );
+
+      expect(summary.householdId).toBe('preset-meena-equity');
+      expect(summary.members.length).toBe(2);
+
+      // Meena Devi does morning biomass chulha cooking
+      const meena = summary.members.find((m) => m.name.includes('Meena'));
+      expect(meena).toBeDefined();
+      expect(meena?.timeWeightedPm25).toBeGreaterThan(70);
+
+      // Verify that unsealed tin-roof home has higher infiltration factor than sealed 3BHK
+      const meenaInfiltration = calcInfiltrationFactor(MEENA_EQUITY_TWIN.home);
+      const sharmaInfiltration = calcInfiltrationFactor(SHARMA_FAMILY_TWIN.home);
+      expect(meenaInfiltration).toBeGreaterThan(sharmaInfiltration);
+    });
+
+    it('demonstrates quantified exposure reduction with DIY Corsi-Rosenthal box', () => {
+      const meenaMember = MEENA_EQUITY_TWIN.members[0];
+      const baselineHome = MEENA_EQUITY_TWIN.home;
+
+      // Home without filter
+      const unmitigatedHome: HomeProfile = {
+        ...baselineHome,
+        purifierType: 'none',
+        doorGapSealed: false,
+      };
+
+      // Home with DIY Corsi-Rosenthal box (CADR ~350 m³/h at ₹2,500)
+      const diyProtectedHome: HomeProfile = {
+        ...baselineHome,
+        purifierType: 'diy_corsi_rosenthal',
+        doorGapSealed: true,
+      };
+
+      const comparison = compareRoutineImpact(
+        meenaMember,
+        unmitigatedHome,
+        meenaMember,
+        diyProtectedHome,
+        SAMPLE_WINTER_SMOG_HOURLY_PM25
+      );
+
+      expect(comparison.scoreSaved).toBeGreaterThan(0);
+      expect(comparison.percentSaved).toBeGreaterThan(5);
+      expect(comparison.pm25SavedUgM3).toBeGreaterThan(5);
+    });
+  });
+
+  describe('Boundary Condition & Extreme Value Testing', () => {
+    it('handles zero, negative, and extreme hazard concentrations gracefully', () => {
+      expect(pm25ToCpcbAqi(0)).toBe(0);
+      expect(pm25ToCpcbAqi(-50)).toBe(0); // clamps negative values
+      expect(pm25ToCpcbAqi(500)).toBe(500);
+      expect(pm25ToCpcbAqi(800)).toBe(680);
+      expect(pm25ToCpcbAqi(2500)).toBe(999); // max CPCB scale cap
+    });
+
+    it('assigns correct risk band across standard spectrum', () => {
+      expect(getRiskBand(15).band).toBe('good');
+      expect(getRiskBand(45).band).toBe('satisfactory');
+      expect(getRiskBand(75).band).toBe('moderate');
+      expect(getRiskBand(105).band).toBe('poor');
+      expect(getRiskBand(200).band).toBe('very_poor');
+      expect(getRiskBand(350).band).toBe('severe');
+    });
+  });
 });
